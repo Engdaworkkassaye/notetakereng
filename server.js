@@ -22,6 +22,20 @@ app.get('/', (req, res) => {
   res.sendFile(path.join(publicPath, 'index.html'));
 });
 
+app.get('/notes', (req, res) => {
+  res.sendFile(path.join(publicPath, 'notes.html'));
+});
+app.get('/api/notes', (req, res) => {
+  
+  fs.readFile(dbPath,  (err, data) => {
+    if (err) {
+      console.error(err);
+      res.status(500).json({ error: 'Internal Server Error' });
+    } else {
+      res.json(JSON.parse(data));
+    }
+  });
+});
 
 
 
