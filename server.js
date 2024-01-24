@@ -38,6 +38,40 @@ app.get('/api/notes', (req, res) => {
 });
 
 
+app.post('/api/notes', (req, res) => {
+  
+  fs.readFile(dbPath,  (err, data) => {
+    if (err) {
+      console.error(err);
+      res.status(500).json({ error: 'Internal Server Error' });
+      return;
+    }
+
+  
+    const notes = JSON.parse(data);
+
+    
+    const newNote = {
+      title: req.body.title,
+      text: req.body.text,
+    };
+
+    
+   
+    notes.push(newNote);
+
+    
+    fs.writeFile(dbPath, JSON.stringify(notes),  (writeErr) => {
+      if (writeErr) {
+        console.error(writeErr);
+        res.status(500).json({ error: 'Internal Server Error' });
+      } else {
+      
+        res.json(newNote);
+      }
+    });
+  });
+});
 
 
 app.listen(PORT, () => {
